@@ -29,7 +29,7 @@ app.use(
 // serve static files
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(express.static(__dirname + '/public'));
-
+app.use('/assets', express.static(__dirname + '/assets'));
 // serve root
 app.get('/', require('./routes'));
 
