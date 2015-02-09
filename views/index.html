@@ -17,7 +17,7 @@
             <h4>Hotels</h4>
             <select id="selectHotel">
             {% for hotel in all_hotels %}
-              <option data-place="{{hotel.place}}">{{ hotel.name }}</option>
+              <option data-place="{{hotel.place._id}}">{{ hotel.name }}</option>
             {% endfor %}
             </select>
             <button id="addHotel" class="btn btn-primary btn-circle pull-right">+</button>
@@ -100,9 +100,13 @@
 
 <script>
 {% autoescape false %}
-var all_hotels_ref = {{ all_hotels | json }};
-var all_restaurants_ref = {{ all_restaurants | json }};
-var all_things_to_do_ref = {{ all_things_to_do | json }};
+// var all_hotels_ref = {{ all_hotels | json }};
+// var all_restaurants_ref = {{ all_restaurants | json }};
+// var all_things_to_do_ref = {{ all_things_to_do | json }};
+
+// var all_hotels_ref = {{ all_hotels }};
+// var all_restaurants_ref = {{ all_restaurants }};
+// var all_things_to_do_ref = {{ all_things_to_do }};
 {% endautoescape %}
 </script>
 

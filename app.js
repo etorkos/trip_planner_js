@@ -1,56 +1,56 @@
-var express = require('express');
-var swig = require('swig');
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
-var routes = require('./routes');
-var sass = require('node-sass-middleware');
-
+var express = require('express'),
+  logger = require('morgan'),
+  bodyParser = require('body-parser'),
+  swig = require('swig'),
+  sassMiddleware = require('node-sass-middleware');
 
 var app = express();
 
-app.listen(3000, function() {
-  console.log("Magic happens on port 3000...");
-});
-swig.setDefaults({
-  cache: false
-})
-app.engine('html', swig.renderFile);
-app.set('views', './views');
+// set up rendering with swig
+app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
+app.engine('html', swig.renderFile);
+swig.setDefaults({cache: false});
 
-app.use(morgan('dev'));
+// log and body parse
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// sass middleware
 app.use(
-  sass({
-    src: __dirname + '/assets', //where the sass files are 
-    dest: __dirname + '/public', //where css should go
-    debug: true
-  })
+    sassMiddleware({
+        src: __dirname + '/assets',
+        dest: __dirname + '/public',
+        debug: true
+    })
 );
-app.use(express.static(__dirname + '/public'));
+
+// serve static files
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
-app.use('/', routes);
+app.use(express.static(__dirname + '/public'));
 
+// serve root
+app.get('/', require('./routes'));
 
-
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error("Not Found");
-  err.status = 404;
-  next(err);
-})
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
 
+// handle any errors
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  console.log({
-    error: err
-  });
-  res.render('error', {
-    message: err.message,
-    error: err.status
-  });
-})
+    res.status(err.status || 500);
+    console.log({error: err});
+    res.render('error', {
+      error: err
+    });
+});
 
-
-module.exports = app;
+// listen on a port
+var port = 3000;
+app.listen(port, function () {
+  console.log('The server is listening closely on port', port);
+});

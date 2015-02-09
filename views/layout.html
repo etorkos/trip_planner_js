@@ -95,17 +95,14 @@
 		$(document).ready(function() {
 		    initialize_gmaps();
 		    $('#addHotel').on("click", function(){
-				var req = $('#selectHotel option:selected').data('place').text();
-				//var plus = $(req).attr('data-place');
-				console.log('direct approach: ', plus);
-				// all_hotels_ref.forEach(function(inc, place){
-				// if(place.name === req.name) {
-				// 	console.log(place.place);
-				// }
-				// })
-				//console.log("info already on element ", req.place);
+				// var req = typeof $('#selectHotel option:selected').attr('data-place');
+				// console.log(req);
 
-		});
+				all_hotels.forEach(function(place){
+					console.log(place.place);
+				})
+
+			});
 
 		});
 		var styleArr = [
