@@ -15,16 +15,16 @@
         <div class="panel-body">
           <div>
             <h4>Hotels</h4>
-            <select>
+            <select id="selectHotel">
             {% for hotel in all_hotels %}
-              <option>{{ hotel.name }}</option>
+              <option data-place="{{hotel.place}}">{{ hotel.name }}</option>
             {% endfor %}
             </select>
-            <button class="btn btn-primary btn-circle pull-right">+</button>
+            <button id="addHotel" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Restaurants</h4>
-            <select>
+            <select id="selectRest">
             {% for restaurant in all_restaurants %}
               <option>{{ restaurant.name }}</option>
             {% endfor %}
@@ -100,9 +100,9 @@
 
 <script>
 {% autoescape false %}
-var all_hotels = {{ hotels | json }};
-var all_restaurants = {{ restaurants | json }};
-var all_things_to_do = {{ things_to_do | json }};
+var all_hotels_ref = {{ all_hotels | json }};
+var all_restaurants_ref = {{ all_restaurants | json }};
+var all_things_to_do_ref = {{ all_things_to_do | json }};
 {% endautoescape %}
 </script>
 

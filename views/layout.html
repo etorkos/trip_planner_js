@@ -4,7 +4,7 @@
 	<head>
 		<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
 		<link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="style.css" rel="stylesheet">
+		<link href="/stylesheets/style.css" rel="stylesheet">
 	</head>
 	<body>
 
@@ -58,6 +58,7 @@
 		    });
 		    
 		    // draw some locations
+		    /*
 		    var hotelLocation = [40.705137, -74.007624];
 		    var restaurantLocations = [
 		        [40.705137, -74.013940],
@@ -67,6 +68,8 @@
 		        [40.716291, -73.995315],
 		        [40.707119, -74.003602]
 		    ];
+
+		    */
 		    function drawLocation (location, opts) {
 		        if (typeof opts !== 'object') {
 		            opts = {}
@@ -75,22 +78,35 @@
 		        opts.map = map;
 		        var marker = new google.maps.Marker(opts);
 		    }
-		    drawLocation(hotelLocation, {
-		        icon: '/images/lodging_0star.png'
-		    });
-		    restaurantLocations.forEach(function (loc) {
-		        drawLocation(loc, {
-		            icon: '/images/restaurant.png'
-		        });
-		    });
-		    thingToDoLocations.forEach(function (loc) {
-		        drawLocation(loc, {
-		            icon: '/images/star-3.png'
-		        });
-		    });
+		    // drawLocation(hotelLocation, {
+		    //     icon: '/images/lodging_0star.png'
+		    // });
+		    // restaurantLocations.forEach(function (loc) {
+		    //     drawLocation(loc, {
+		    //         icon: '/images/restaurant.png'
+		    //     });
+		    // });
+		    // thingToDoLocations.forEach(function (loc) {
+		    //     drawLocation(loc, {
+		    //         icon: '/images/star-3.png'
+		    //     });
+		    // });
 		}
 		$(document).ready(function() {
 		    initialize_gmaps();
+		    $('#addHotel').on("click", function(){
+				var req = $('#selectHotel option:selected').data('place').text();
+				//var plus = $(req).attr('data-place');
+				console.log('direct approach: ', plus);
+				// all_hotels_ref.forEach(function(inc, place){
+				// if(place.name === req.name) {
+				// 	console.log(place.place);
+				// }
+				// })
+				//console.log("info already on element ", req.place);
+
+		});
+
 		});
 		var styleArr = [
 		    {
