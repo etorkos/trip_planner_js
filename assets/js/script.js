@@ -5,7 +5,7 @@ $(document).ready(function(){
 				var loc = base.attr('data-place').split(',');
 				var name = base[0].value;
 				var className = $('.current-day')[0].id;
-				drawLocation(loc,{ icon: '/images/restaurant.png' }, className);
+				drawLocation(loc,{ icon: '/images/restaurant.png' }, className, name);
 				
 				var temp = $('<div class="itinerary-item '+className+'"></div>').append('<span class="title">'+name+'   </span><button class="btn btn-xs btn-danger remove btn-circle event-remove">x</button>');
 				$('#rest-list').append(temp);
@@ -16,7 +16,7 @@ $(document).ready(function(){
 				var loc = base.attr('data-place').split(',');
 				var name = base[0].value;
 				var className = $('.current-day')[0].id;
-				drawLocation(loc,{ icon: '/images/lodging_0star.png' }, className);
+				drawLocation(loc,{ icon: '/images/lodging_0star.png' }, className, name);
 				
 				var temp = $('<div class="itinerary-item '+className+'"></div>').append('<span class="title">'+name+'   </span><button class="btn btn-xs btn-danger remove btn-circle event-remove">x</button>');
 				$('#hotel-list').append(temp);
@@ -27,13 +27,13 @@ $(document).ready(function(){
 				var loc = base.attr('data-place').split(',');
 				var name = base[0].value;
 				var className = $('.current-day')[0].id;
-				drawLocation(loc,{ icon: '/images/star-3.png' }, className);
+				drawLocation(loc,{ icon: '/images/star-3.png' }, className, name);
 				
 				var temp = $('<div class="itinerary-item '+className+'"></div>').append('<span class="title">'+name+'   </span><button class="btn btn-xs btn-danger remove btn-circle event-remove">x</button>');
 				$('#ttd-list').append(temp);
 			});
 
-	function drawLocation (location, opts, id) {
+	function drawLocation (location, opts, id, name) {
 			        if (typeof opts !== 'object') {
 			            opts = {}
 			        }
@@ -41,7 +41,17 @@ $(document).ready(function(){
 			        opts.map = map;
 			        var marker = new google.maps.Marker(opts);
 			        markers.push({id: id,
-			        	marker: marker});
+			        	marker: marker,
+			        	name: name
+			        });
+			        var bounds = new google.maps.LatLngBounds();
+			        for (var i=0; i < markers.length; i++) {
+			        	if (markers[i].id = id) {
+			        		bounds.extend(markers[i].marker.position);
+			        	}
+			        }
+						
+					map.fitBounds(bounds);
 	}
     
 	$('#new-day').on('click', function(){
@@ -76,7 +86,19 @@ $(document).ready(function(){
 	//Event removal
 	$('.panel-body').on("click", ".event-remove", function(){
 		console.log('clicked');
+		var name = $(this).parent().children()[0].innerText;
+		var id = $(this).parent().attr('class').split(' ')[1];
+		console.log(name);
+		
 		$(this).parent().remove();
+		markers.forEach(function(mark) {
+			if (mark.id == id && mark.name == name) {
+				var index = markers.indexOf(mark);
+				mark.marker.setVisible(false);
+				markers.splice(index, 1);
+				console.log(markers);
+			}
+		});
 	})
 
 	//Day removal
@@ -87,8 +109,16 @@ $(document).ready(function(){
 			alert('you dont have enough days');
 		}
 		else{
-			
 			var currId = $('.current-day')[0].id;
+			markers.forEach(function(mark, indx) {
+				if (mark.id == currId) {
+					mark.marker.setVisible(false);
+					markers.splice(indx, 1);
+					//console.log(markers);
+				}
+			});
+
+			
 			var num = +$('.current-day').text();
 			console.log(currId);
 			$('.'+currId).remove();//remove events
@@ -104,6 +134,12 @@ $(document).ready(function(){
 				$('#day-'+numPlus).text(num);
 				$('#day-'+numPlus)[0].id = 'day-'+num;
 				$('.day-'+numPlus).removeClass('day-'+numPlus).addClass('day-'+num);
+				markers.forEach(function(mark) {
+					if (mark.id == currId) {
+						mark.marker.id = "day-" + num;
+						console.log(mark);
+					}
+				});
 				num++;
 			}
 		}
